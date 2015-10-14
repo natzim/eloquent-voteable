@@ -14,7 +14,7 @@ class CreateVotesTable extends Migration
             $table->increments('id');
             $table->morphs('voteable');
             $table->morphs('voter');
-            $table->integer('weight');
+            $table->tinyInteger('weight');
             $table->timestamps();
         });
     }

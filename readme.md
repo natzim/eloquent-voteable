@@ -51,6 +51,14 @@ class User extends Model implements VoterInterface
 
 #### Methods
 
+##### Vote with custom weight
+
+```php
+$user->vote($post, 20);
+```
+
+**NOTE: Vote weight is stored as a `tinyInteger`, so values can range from -127 to 127**
+
 ##### Vote up
 
 ```php
@@ -81,7 +89,7 @@ $user->vote($post, 0);
 $user->votes;
 ```
 
-##### Get previous vote
+##### Get previous vote on resource
 
 ```php
 $user->getVote($post);
@@ -114,6 +122,14 @@ $post->score();
 // or
 $post->votes()->sum('weight');
 ```
+
+##### Vote with custom weight
+
+```php
+$post->voteBy($user, 20);
+```
+
+**NOTE: Vote weight is stored as a `tinyInteger`, so values can range from -127 to 127**
 
 ##### Vote up
 
