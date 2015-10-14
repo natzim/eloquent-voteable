@@ -1,8 +1,6 @@
 <?php
 
-namespace Natzim\EloquentVoteable\Traits;
-
-use Natzim\EloquentVoteable\Traits\VoterInterface;
+namespace Natzim\EloquentVoteable\Contracts;
 
 interface VoteableInterface
 {

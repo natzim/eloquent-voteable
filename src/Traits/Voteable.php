@@ -2,11 +2,10 @@
 
 namespace Natzim\EloquentVoteable\Traits;
 
+use Natzim\EloquentVoteable\Contracts\VoterInterface;
 use Natzim\EloquentVoteable\Models\Vote;
-use Natzim\EloquentVoteable\Traits\VoterInterface;
-use Natzim\EloquentVoteable\Voter;
 
-trait VoteableTrait
+trait Voteable
 {
     /**
      * Get votes made on resource.
@@ -35,19 +34,19 @@ trait VoteableTrait
      */
     public function getVoteBy(VoterInterface $voter)
     {
-        return Voter::get($voter, $this);
+        return Vote::get($voter, $this);
     }
 
     /**
      * Vote on resource by voter.
      *
-     * @param  VoterInterface $voter  VoterInterface voting on resource.
+     * @param  VoterInterface $voter  Voter voting on resource.
      * @param  int            $weight Weight of the vote.
      * @return Vote|null              Newly created vote or null if deleted.
      */
     public function voteBy(VoterInterface $voter, $weight)
     {
-        return Voter::vote($voter, $this, $weight);
+        return Vote::store($voter, $this, $weight);
     }
 
     /**

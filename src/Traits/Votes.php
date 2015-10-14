@@ -2,11 +2,10 @@
 
 namespace Natzim\EloquentVoteable\Traits;
 
-use Natzim\EloquentVoteable\Voter;
+use Natzim\EloquentVoteable\Contracts\VoteableInterface;
 use Natzim\EloquentVoteable\Models\Vote;
-use Natzim\EloquentVoteable\Traits\VoteableInterface;
 
-trait VoterTrait
+trait Votes
 {
     /**
      * Get votes that the voter has made.
@@ -25,7 +24,7 @@ trait VoterTrait
      */
     public function getVote(VoteableInterface $voteable)
     {
-        return Voter::get($this, $voteable);
+        return Vote::get($this, $voteable);
     }
 
     /**
@@ -37,7 +36,7 @@ trait VoterTrait
      */
     public function vote(VoteableInterface $voteable, $weight)
     {
-        return Voter::vote($this, $voteable, $weight);
+        return Vote::store($this, $voteable, $weight);
     }
 
     /**

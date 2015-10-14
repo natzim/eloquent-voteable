@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
-use Natzim\EloquentVoteable\Traits\VoteableInterface;
-use Natzim\EloquentVoteable\Traits\VoteableTrait;
+use Natzim\EloquentVoteable\Contracts\VoteableInterface;
+use Natzim\EloquentVoteable\Traits\Voteable;
 
 class Post extends Model implements VoteableInterface
 {
-    use VoteableTrait;
+    use Voteable;
 
     public $timestamps = false;
 }
