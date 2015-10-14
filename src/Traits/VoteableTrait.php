@@ -17,7 +17,7 @@ trait VoteableTrait
     {
         return $this->morphMany(Vote::class, 'voteable');
     }
-    
+
     /**
      * Get the resource's score.
      *
@@ -67,7 +67,7 @@ trait VoteableTrait
                 // There is no previous vote, so there is nothing to delete
                 return null;
             }
-            
+
             $vote = new Vote;
 
             $vote->voteable()->associate($this);
