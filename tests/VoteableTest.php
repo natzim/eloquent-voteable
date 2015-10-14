@@ -185,10 +185,10 @@ class VoteableTest extends TestCase
         $post = $this->makePost();
 
         // First vote
-        $user->upVote($post);
+        $user->vote($post, 1);
 
         // Second vote
-        $user->upVote($post);
+        $user->vote($post, 1);
 
         $this->assertEquals($post->score(), 1);
     }
@@ -199,11 +199,31 @@ class VoteableTest extends TestCase
         $post = $this->makePost();
 
         // Upvote
-        $user->upVote($post);
+        $user->vote($post, 1);
 
         // Then downvote
-        $user->downVote($post);
+        $user->vote($post, -1);
 
         $this->assertEquals($post->score(), -1);
+    }
+
+    public function testVoterToVotesRelationship()
+    {
+        $user = $this->makeUser();
+        $post = $this->makePost();
+
+        $user->vote($post, 1);
+
+        $this->assertEquals($user->votes->count(), 1);
+    }
+
+    public function testVoteableToVotesRelationship()
+    {
+        $user = $this->makeUser();
+        $post = $this->makePost();
+
+        $user->vote($post, 1);
+
+        $this->assertEquals($post->votes->count(), 1);
     }
 }
