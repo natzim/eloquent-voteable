@@ -9,5 +9,4 @@ class Post extends Model implements VoteableInterface
     use VoteableTrait;
 
     public $timestamps = false;
-    protected $table = 'posts';
 }

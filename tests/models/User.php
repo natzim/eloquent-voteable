@@ -9,5 +9,4 @@ class User extends Model implements VoterInterface
     use VoterTrait;
 
     public $timestamps = false;
-    protected $table = 'users';
 }
