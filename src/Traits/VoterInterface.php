@@ -2,13 +2,13 @@
 
 namespace Natzim\EloquentVoteable\Traits;
 
-use Illuminate\Database\Eloquent\Model;
+use Natzim\EloquentVoteable\Traits\VoteableInterface;
 
 interface VoterInterface
 {
-    public function getVote(Model $model);
-    public function vote(Model $model, $weight);
-    public function upVote(Model $model);
-    public function downVote(Model $model);
-    public function cancelVote(Model $model);
+    public function getVote(VoteableInterface $voteable);
+    public function vote(VoteableInterface $voteable, $weight);
+    public function upVote(VoteableInterface $voteable);
+    public function downVote(VoteableInterface $voteable);
+    public function cancelVote(VoteableInterface $voteable);
 }

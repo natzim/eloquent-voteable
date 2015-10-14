@@ -1,6 +1,5 @@
 <?php
 
-use Natzim\EloquentVoteable\Exceptions\NotVoteableException;
 use Natzim\EloquentVoteable\Models\Vote;
 use Orchestra\Testbench\TestCase;
 
@@ -168,17 +167,6 @@ class VoteableTest extends TestCase
         $this->assertInstanceOf(Vote::class, $vote);
     }
 
-    public function testVoteOnUnvoteableResource()
-    {
-        $this->setExpectedException(NotVoteableException::class);
-
-        $user = $this->makeUser();
-        // Users are not voteable
-        $resource = $this->makeUser();
-
-        $user->vote($resource, 1);
-    }
-
     public function testUpdateVoteWithSameWeight()
     {
         $user = $this->makeUser();
@@ -205,6 +193,16 @@ class VoteableTest extends TestCase
         $user->vote($post, -1);
 
         $this->assertEquals($post->score(), -1);
+    }
+
+    public function testCancelVoteWithNoPreviousVote()
+    {
+        $user = $this->makeUser();
+        $post = $this->makePost();
+
+        $user->vote($post, 0);
+
+        $this->assertEquals($post->score(), 0);
     }
 
     public function testVoterToVotesRelationship()

@@ -2,9 +2,9 @@
 
 namespace Natzim\EloquentVoteable\Traits;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Natzim\EloquentVoteable\Models\Vote;
+use Natzim\EloquentVoteable\Traits\VoterInterface;
+use Natzim\EloquentVoteable\Voter;
 
 trait VoteableTrait
 {
@@ -31,63 +31,32 @@ trait VoteableTrait
     /**
      * Get a voter's previous vote on resource.
      *
-     * @return Model
+     * @return Vote|null
      */
-    public function getVoteBy(Model $voter)
+    public function getVoteBy(VoterInterface $voter)
     {
-        return $this->votes()
-            ->where('voter_id', $voter->getKey())
-            ->where('voter_type', get_class($voter))
-            ->firstOrFail();
+        return Voter::get($voter, $this);
     }
 
     /**
      * Vote on resource by voter.
      *
-     * @param  Model     $voter  Model voting on resource.
-     * @param  int       $weight Weight of the vote.
-     * @return Vote|null         Newly created vote or null if deleted.
+     * @param  VoterInterface $voter  VoterInterface voting on resource.
+     * @param  int            $weight Weight of the vote.
+     * @return Vote|null              Newly created vote or null if deleted.
      */
-    public function voteBy(Model $voter, $weight)
+    public function voteBy(VoterInterface $voter, $weight)
     {
-        try {
-            $vote = $this->votes()
-                ->where('voter_id', $voter->getKey())
-                ->where('voter_type', get_class($voter))
-                ->firstOrFail();
-
-            if ($weight == 0 && config('voteable.cancel_behavior') === 'delete') {
-                $vote->delete();
-
-                return null;
-            }
-
-        } catch (ModelNotFoundException $e) {
-            if ($weight == 0 && config('voteable.cancel_behavior') === 'delete') {
-                // There is no previous vote, so there is nothing to delete
-                return null;
-            }
-
-            $vote = new Vote;
-
-            $vote->voteable()->associate($this);
-            $vote->voter()->associate($voter);
-        }
-
-        $vote->weight = $weight;
-
-        $vote->save();
-
-        return $vote;
+        return Voter::vote($voter, $this, $weight);
     }
 
     /**
      * Upvote resource by voter.
      *
-     * @param  Model $voter
+     * @param  VoterInterface $voter
      * @return Vote
      */
-    public function upVoteBy(Model $voter)
+    public function upVoteBy(VoterInterface $voter)
     {
         return $this->voteBy($voter, 1);
     }
@@ -95,10 +64,10 @@ trait VoteableTrait
     /**
      * Downvote resource by voter.
      *
-     * @param  Model $voter
+     * @param  VoterInterface $voter
      * @return Vote
      */
-    public function downVoteBy(Model $voter)
+    public function downVoteBy(VoterInterface $voter)
     {
         return $this->voteBy($voter, -1);
     }
@@ -106,10 +75,10 @@ trait VoteableTrait
     /**
      * Cancel vote on resource by voter.
      *
-     * @param  Model $voter
+     * @param  VoterInterface $voter
      * @return Vote
      */
-    public function cancelVoteBy(Model $voter)
+    public function cancelVoteBy(VoterInterface $voter)
     {
         return $this->voteBy($voter, 0);
     }

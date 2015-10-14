@@ -2,8 +2,7 @@
 
 namespace Natzim\EloquentVoteable\Traits;
 
-use Illuminate\Database\Eloquent\Model;
-use Natzim\EloquentVoteable\Exceptions\NotVoteableException;
+use Natzim\EloquentVoteable\Voter;
 use Natzim\EloquentVoteable\Models\Vote;
 use Natzim\EloquentVoteable\Traits\VoteableInterface;
 
@@ -20,67 +19,57 @@ trait VoterTrait
     }
 
     /**
-     * Get previous vote by voter on given resource.
+     * Get previous vote by voter on a voteable.
      *
-     * @return Vote
+     * @return Vote|null
      */
-    public function getVote(Model $model)
+    public function getVote(VoteableInterface $voteable)
     {
-        return $this->votes()
-            ->where('voteable_id', $model->getKey())
-            ->where('voteable_type', get_class($model))
-            ->first();
+        return Voter::get($this, $voteable);
     }
 
     /**
-     * Vote on a given resource.
+     * Vote on a voteable.
      *
-     * @throws NotVoteableException if the model being voted on does not
-     *      implement `VoteableInterface`.
-     *
-     * @param  Model $model
-     * @param  int   $weight
+     * @param  VoteableInterface $voteable
+     * @param  int               $weight
      * @return Vote
      */
-    public function vote(Model $model, $weight)
+    public function vote(VoteableInterface $voteable, $weight)
     {
-        if (! $model instanceof VoteableInterface) {
-            throw new NotVoteableException;
-        }
-
-        return $model->voteBy($this, $weight);
+        return Voter::vote($this, $voteable, $weight);
     }
 
     /**
-     * Upvote a given resource.
+     * Upvote a voteable.
      *
-     * @param  Model $model
+     * @param  VoteableInterface $voteable
      * @return Vote
      */
-    public function upVote(Model $model)
+    public function upVote(VoteableInterface $voteable)
     {
-        return $this->vote($model, 1);
+        return $this->vote($voteable, 1);
     }
 
     /**
-     * Downvote a given resource.
+     * Downvote a voteable.
      *
-     * @param  Model $model
+     * @param  VoteableInterface $voteable
      * @return Vote
      */
-    public function downVote(Model $model)
+    public function downVote(VoteableInterface $voteable)
     {
-        return $this->vote($model, -1);
+        return $this->vote($voteable, -1);
     }
 
     /**
-     * Cancel a vote on a given resource.
+     * Cancel a vote on a voteable.
      *
-     * @param  Model $model
+     * @param  VoteableInterface $voteable
      * @return Vote
      */
-    public function cancelVote(Model $model)
+    public function cancelVote(VoteableInterface $voteable)
     {
-        return $this->vote($model, 0);
+        return $this->vote($voteable, 0);
     }
 }
