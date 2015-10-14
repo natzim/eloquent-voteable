@@ -32,3 +32,47 @@ Run the migrations
 ```
 php artsain migrate
 ```
+
+## Documentation
+
+This package is made up of three important files:
+
+- `Natzim\EloquentVoteable\Voter`
+- `Natzim\EloquentVoteable\Traits\VoterTrait`
+- `Natzim\EloquentVoteable\Traits\VoteableTrait`
+
+`Voter` is the main class where all the logic happens. You should never need to access it directly.
+
+`VoterTrait` contains all the methods needed to allow a model to vote on another model.
+
+`VoteableTrait` contains all the methods needed to allow a model to be voted on.
+
+For example, you could have a user, who can vote on posts.
+
+In the user model:
+
+```php
+use Natzim\EloquentVoteable\Traits\VoterInterface;
+use Natzim\EloquentVoteable\Traits\VoterTrait;
+
+class User extends Model implements VoterInterface
+{
+    use VoterTrait;
+
+    // ...
+}
+```
+
+In the post model:
+
+```php
+use Natzim\EloquentVoteable\Traits\VoteableInterface;
+use Natzim\EloquentVoteable\Traits\VoteableTrait;
+
+class Post extends Model implements VoteableInterface
+{
+    use VoteableTrait;
+
+    // ...
+}
+```
