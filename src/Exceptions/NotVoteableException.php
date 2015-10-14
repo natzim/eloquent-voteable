@@ -2,6 +2,6 @@
 
 namespace Natzim\EloquentVoteable\Exceptions;
 
-class NotVoteableException extends Exception
+class NotVoteableException extends \Exception
 {
 }
