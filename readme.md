@@ -73,6 +73,18 @@ $user->cancelVote($post);
 $user->vote($post, 0);
 ```
 
+##### Get votes
+
+```php
+$user->votes;
+```
+
+##### Get previous vote
+
+```php
+$user->getVote($post);
+```
+
 ### Voteable
 
 `Voteable` is applied to models that can be voted on. (e.g. posts)
@@ -125,3 +137,14 @@ $post->cancelVoteBy($user);
 $post->voteBy($user, 0);
 ```
 
+##### Get votes
+
+```php
+$post->votes;
+```
+
+##### Get previous vote by voter
+
+```php
+$post->getVoteBy($user);
+```
