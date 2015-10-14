@@ -1,6 +1,8 @@
 # Eloquent Voteable
 
 [![Build Status](https://img.shields.io/travis/natzim/eloquent-voteable.svg?style=flat-square)](https://travis-ci.org/natzim/eloquent-voteable)
+[![GPA](https://img.shields.io/codeclimate/github/natzim/eloquent-voteable.svg?style=flat-square)](https://codeclimate.com/github/natzim/eloquent-voteable)
+[![Code Coverage](https://img.shields.io/codeclimate/coverage/github/natzim/eloquent-voteable.svg?style=flat-square)](https://codeclimate.com/github/natzim/eloquent-voteable/coverage)
 
 ## Installation
 
