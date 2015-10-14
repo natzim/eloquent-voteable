@@ -1,0 +1,19 @@
+{
+    "name": "natzim/eloquent-voteable",
+    "description": "Polymorphic voting for Eloquent models",
+    "keywords": ["vote", "voting"],
+    "homepage": "https://github.com/natzim/eloquent-voteable",
+    "license": "MIT",
+    "require": {
+        "illuminate/database": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Natzim\\EloquentVoteable\\": "src/"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.1",
+        "phpunit/phpunit": "^5.0"
+    }
+}
