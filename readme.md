@@ -12,7 +12,7 @@ Install the package using composer
 composer require natzim/eloquent-voteable
 ```
 
-Add the service provider to the `providers` array in `app/config/app.php`
+Add the service provider to the `providers` array in `config/app.php`
 
 ```
 'providers' => [
@@ -21,7 +21,7 @@ Add the service provider to the `providers` array in `app/config/app.php`
 ]
 ```
 
-Publish the config and migrations
+Publish the migrations
 
 ```
 php artisan vendor:publish
