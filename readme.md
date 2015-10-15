@@ -175,3 +175,11 @@ $voteable->cancelVoteBy($voter);
 ```
 
 Returns: `null`
+
+##### Get the previous vote by a voter
+
+```php
+$voteable->getVoteBy($voter);
+```
+
+Returns: `Vote`
