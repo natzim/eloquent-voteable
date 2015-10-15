@@ -71,27 +71,55 @@ class VoteableTest extends TestCase
      * Tests
      */
 
-    public function testVoterUpVoteResource()
+    public function testPositiveCustomVoteWeight()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $user->upVote($post);
+        $vote = $user->vote($post, 20);
+
+        $this->assertEquals($post->score(), 20);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 20);
+    }
+
+    public function testNegativeCustomVoteWeight()
+    {
+        $user = $this->makeUser();
+        $post = $this->makePost();
+
+        $vote = $user->vote($post, -20);
+
+        $this->assertEquals($post->score(), -20);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, -20);
+    }
+
+    public function testUpVoteFromVoter()
+    {
+        $user = $this->makeUser();
+        $post = $this->makePost();
+
+        $vote = $user->upVote($post);
 
         $this->assertEquals($post->score(), 1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
-    public function testVoterDownVoteResource()
+    public function testDownVoteFromVoter()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $user->downVote($post);
+        $vote = $user->downVote($post);
 
         $this->assertEquals($post->score(), -1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, -1);
     }
 
-    public function testVoterCancelVoteOnResource()
+    public function testCancelVoteFromVoter()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
@@ -100,12 +128,13 @@ class VoteableTest extends TestCase
         $user->upVote($post);
 
         // Then cancel vote
-        $user->cancelVote($post);
+        $vote = $user->cancelVote($post);
 
         $this->assertEquals($post->score(), 0);
+        $this->assertNull($vote);
     }
 
-    public function testVoterGetVote()
+    public function testGetVoteFromVoter()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
@@ -117,29 +146,34 @@ class VoteableTest extends TestCase
         $vote = $user->getVote($post);
 
         $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
-    public function testResourceUpVoteByVoter()
+    public function testUpVoteFromVoteable()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $post->upVoteBy($user);
+        $vote = $post->upVoteBy($user);
 
         $this->assertEquals($post->score(), 1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
-    public function testResourceDownVoteByVoter()
+    public function testDownVoteFromVoteable()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $post->downVoteBy($user);
+        $vote = $post->downVoteBy($user);
 
         $this->assertEquals($post->score(), -1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, -1);
     }
 
-    public function testResourceCancelVoteByVoter()
+    public function testCancelVoteFromVoteable()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
@@ -148,12 +182,13 @@ class VoteableTest extends TestCase
         $post->upVoteBy($user);
 
         // Then cancel vote
-        $post->cancelVoteBy($user);
+        $vote = $post->cancelVoteBy($user);
 
         $this->assertEquals($post->score(), 0);
+        $this->assertNull($vote);
     }
 
-    public function testResourceGetVoteByVoter()
+    public function testGetVoteFromVoteable()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
@@ -165,6 +200,7 @@ class VoteableTest extends TestCase
         $vote = $post->getVoteBy($user);
 
         $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
     public function testUpdateVoteWithSameWeight()
@@ -176,9 +212,11 @@ class VoteableTest extends TestCase
         $user->vote($post, 1);
 
         // Second vote
-        $user->vote($post, 1);
+        $vote = $user->vote($post, 1);
 
         $this->assertEquals($post->score(), 1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
     public function testUpdateVoteWithOppositeWeight()
@@ -190,19 +228,22 @@ class VoteableTest extends TestCase
         $user->vote($post, 1);
 
         // Then downvote
-        $user->vote($post, -1);
+        $vote = $user->vote($post, -1);
 
         $this->assertEquals($post->score(), -1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, -1);
     }
 
-    public function testCancelVoteWithNoPreviousVote()
+    public function testCancelVoteWithoutPreviousVote()
     {
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $user->vote($post, 0);
+        $vote = $user->vote($post, 0);
 
         $this->assertEquals($post->score(), 0);
+        $this->assertNull($vote);
     }
 
     public function testVoterToVotesRelationship()
@@ -210,9 +251,11 @@ class VoteableTest extends TestCase
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $user->vote($post, 1);
+        $vote = $user->vote($post, 1);
 
         $this->assertEquals($user->votes->count(), 1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 
     public function testVoteableToVotesRelationship()
@@ -220,8 +263,10 @@ class VoteableTest extends TestCase
         $user = $this->makeUser();
         $post = $this->makePost();
 
-        $user->vote($post, 1);
+        $vote = $user->vote($post, 1);
 
         $this->assertEquals($post->votes->count(), 1);
+        $this->assertInstanceOf(Vote::class, $vote);
+        $this->assertEquals($vote->weight, 1);
     }
 }
