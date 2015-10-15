@@ -10,7 +10,7 @@ trait Votes
     /**
      * Get votes that the voter has made.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function votes()
     {

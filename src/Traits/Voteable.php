@@ -10,7 +10,7 @@ trait Voteable
     /**
      * Get votes made on resource.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function votes()
     {
@@ -40,9 +40,9 @@ trait Voteable
     /**
      * Vote on resource by voter.
      *
-     * @param  VoterInterface $voter  Voter voting on resource.
-     * @param  int            $weight Weight of the vote.
-     * @return Vote|null              Newly created vote or null if deleted.
+     * @param  VoterInterface $voter
+     * @param  int            $weight
+     * @return Vote|null
      */
     public function voteBy(VoterInterface $voter, $weight)
     {

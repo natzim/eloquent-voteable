@@ -8,11 +8,21 @@ use Natzim\EloquentVoteable\Contracts\VoterInterface;
 
 class Vote extends Model
 {
+    /**
+     * Get voteable relations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function voteable()
     {
         return $this->morphTo();
     }
 
+    /**
+     * Get voter relations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function voter()
     {
         return $this->morphTo();
@@ -21,10 +31,10 @@ class Vote extends Model
     /**
      * Main vote function.
      *
-     * @param  VoterInterface    $voter   Model voting on resource.
-     * @param  VoteableInterface $votable Resource being voted on.
-     * @param  int               $weight  Weight of the vote (usually -1, 0 or 1).
-     * @return Vote|null                  Newly created vote or null if cancelled.
+     * @param  VoterInterface    $voter
+     * @param  VoteableInterface $votable
+     * @param  int               $weight
+     * @return Vote|null
      */
     public static function store(VoterInterface $voter, VoteableInterface $voteable, $weight)
     {
@@ -58,6 +68,13 @@ class Vote extends Model
         return $vote;
     }
 
+    /**
+     * Get vote by voter and voteable.
+     *
+     * @param  VoterInterface    $voter
+     * @param  VoteableInterface $voteable
+     * @return Vote|null
+     */
     public static function get(VoterInterface $voter, VoteableInterface $voteable)
     {
         return self::where('voter_id', $voter->getKey())
