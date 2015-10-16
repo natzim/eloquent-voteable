@@ -36,7 +36,7 @@ class VoteableTest extends TestCase
         ]);
     }
 
-    protected function getPackageProviders()
+    protected function getPackageProviders($app)
     {
         return ['Natzim\EloquentVoteable\VoteableServiceProvider'];
     }
