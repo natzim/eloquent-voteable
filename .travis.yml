@@ -6,6 +6,7 @@ php:
 
 before_script:
     - composer install
+    - composer install codeclimate/php-test-reporter
 
 script:
     - phpunit --coverage-clover build/logs/clover.xml
